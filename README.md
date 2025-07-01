@@ -187,3 +187,49 @@ public class Main {
 Se agregó Triangle sin tocar el código de AreaCalculator.
 
 Extensión sin modificación = se cumple el Principio OCP.
+
+--------------------------------------------------------------
+
+L — Liskov Substitution Principle (Principio de sustitución de Liskov)
+
+## *"Las clases hijas deben poder sustituir a sus clases padre sin afectar el comportamiento del programa.”*
+
+Según este principio, nuestras clases derivadas deben poder sustituir a sus clases base sin alterar el comportamiento del programa.
+
+```java
+public class Rectangulo {
+    protected int ancho, alto;
+    public void setAncho(int ancho) { this.ancho = ancho; }
+    public void setAlto(int alto) { this.alto = alto; }
+}
+
+public class Cuadrado extends Rectangulo {
+    @Override
+    public void setAncho(int ancho) { this.ancho = this.alto = ancho; }
+    @Override
+    public void setAlto(int alto) { this.alto = this.ancho = alto; }
+}
+```
+
+❌ Un `Cuadrado` no se comporta como un `Rectángulo`. Si un método espera un `Rectángulo` y cambia el ancho sin tocar el alto, **el resultado será inesperado**.
+
+```java
+public abstract class Forma {
+    public abstract int calcularArea();
+}
+
+public class Rectangulo extends Forma {
+    private int ancho, alto;
+    public Rectangulo(int ancho, int alto) { this.ancho = ancho; this.alto = alto; }
+    public int calcularArea() { return ancho * alto; }
+}
+
+public class Cuadrado extends Forma {
+    private int lado;
+    public Cuadrado(int lado) { this.lado = lado; }
+    public int calcularArea() { return lado * lado; }
+}
+
+```
+
+✅ `Cuadrado` y `Rectangulo` **son tratados como formas independientes**, cumpliendo LSP.
