@@ -224,7 +224,7 @@ public class Rectangulo extends Forma {
     public int calcularArea() { return ancho * alto; }
 }
 
-public class Cuadrado extends Forma {
+ublic class Cuadrado extends Forma {
     private int lado;
     public Cuadrado(int lado) { this.lado = lado; }
     public int calcularArea() { return lado * lado; }
@@ -233,3 +233,96 @@ public class Cuadrado extends Forma {
 ```
 
 ✅ `Cuadrado` y `Rectangulo` **son tratados como formas independientes**, cumpliendo LSP.
+🔹 I - Interface Segregation Principle (ISP)
+Principio de Segregación de Interfaces
+
+No se debe forzar a una clase a implementar interfaces que no necesita.
+
+Ejemplo incorrecto:
+
+java
+Copiar
+Editar
+interface Worker {
+    void work();
+    void eat();
+}
+
+class Robot implements Worker {
+    public void work() {
+        System.out.println("Robot working");
+    }
+
+    public void eat() {
+        // No aplica, pero lo debe implementar igual
+    }
+}
+Ejemplo correcto:
+
+java
+Copiar
+Editar
+interface Workable {
+    void work();
+}
+
+interface Eatable {
+    void eat();
+}
+
+class Human implements Workable, Eatable {
+    public void work() { System.out.println("Human working"); }
+    public void eat() { System.out.println("Human eating"); }
+}
+
+class Robot implements Workable {
+    public void work() { System.out.println("Robot working"); }
+}
+🔹 D - Dependency Inversion Principle (DIP)
+Principio de Inversión de Dependencias
+
+Las clases deben depender de abstracciones (interfaces), no de implementaciones concretas.
+
+Ejemplo incorrecto:
+
+java
+Copiar
+Editar
+class LightBulb {
+    public void turnOn() { System.out.println("Bulb on"); }
+    public void turnOff() { System.out.println("Bulb off"); }
+}
+
+class Switch {
+    private LightBulb bulb = new LightBulb();
+
+    public void operate() {
+        bulb.turnOn();
+    }
+}
+Ejemplo correcto:
+
+java
+Copiar
+Editar
+interface Switchable {
+    void turnOn();
+    void turnOff();
+}
+
+class LightBulb implements Switchable {
+    public void turnOn() { System.out.println("Bulb on"); }
+    public void turnOff() { System.out.println("Bulb off"); }
+}
+
+class Switch {
+    private Switchable device;
+
+    public Switch(Switchable device) {
+        this.device = device;
+    }
+
+    public void operate() {
+        device.turnOn();
+    }
+}
