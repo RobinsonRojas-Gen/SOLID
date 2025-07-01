@@ -231,8 +231,10 @@ ublic class Cuadrado extends Forma {
 }
 
 ```
+--------------------------------------------------------------
 
 ✅ `Cuadrado` y `Rectangulo` **son tratados como formas independientes**, cumpliendo LSP.
+
 🔹 I - Interface Segregation Principle (ISP)
 Principio de Segregación de Interfaces
 
@@ -278,6 +280,9 @@ class Human implements Workable, Eatable {
 class Robot implements Workable {
     public void work() { System.out.println("Robot working"); }
 }
+
+--------------------------------------------------------------
+
 🔹 D - Dependency Inversion Principle (DIP)
 Principio de Inversión de Dependencias
 
