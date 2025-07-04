@@ -1,31 +1,32 @@
+# Principios SOLID
 
-# SOLID
-Los principios SOLID son un conjunto de 5 fundamento que guían a los desarrolladores programación orienta da a objetos, fueron introducidos por Robert J. Martin y son esenciales para el desarrollo de software de calidad. Los 5 principios son:
+Los principios SOLID son un conjunto de **5 fundamentos** que guían a los desarrolladores en la programación orientada a objetos. Fueron introducidos por **Robert C. Martin** y son esenciales para el desarrollo de software de calidad, mantenible y escalable.
 
-S — Single Responsibility Principle (Principio de responsabilidad única)
+## ¿Qué son los principios SOLID?
 
-O — Open-Closed Principle (Principio Abierto-Cerrado)
+**SOLID** es un acrónimo que representa:
 
-L — Liskov Substitution Principle (Principio de sustitución de Liskov)
+- **S** — Single Responsibility Principle (Principio de Responsabilidad Única)
+- **O** — Open-Closed Principle (Principio Abierto-Cerrado)
+- **L** — Liskov Substitution Principle (Principio de Sustitución de Liskov)
+- **I** — Interface Segregation Principle (Principio de Segregación de Interfaces)
+- **D** — Dependency Inversion Principle (Principio de Inversión de Dependencias)
 
-I — Interface Segregation Principle (Principio de segregación de la interfaz)
+---
 
-D — Dependency Inversion Principle (Principio de inversión de dependencia)
+## 🎯 S - Single Responsibility Principle (SRP)
 
---------------------------------------------------------------
+### Definición
+**"Una clase debe tener una sola razón para cambiar"**
 
-S – Single Responsibility Principle (Responsabilidad Única)
+Cada clase debe tener una única responsabilidad y hacerlo bien.
 
-Una clase debe tener una sola razón para cambiar.
-
-✅ Que haga una sola cosa y lo haga bien.
-
-❌ Mal ejemplo:
-java
-Copiar
-Editar
+### ❌ Ejemplo Incorrecto
+```java
 public class Reporte {
-    public String generarContenido() { return "contenido"; }
+    public String generarContenido() { 
+        return "contenido"; 
+    }
 
     public void guardarEnArchivo(String contenido) {
         // Lógica para guardar
@@ -35,10 +36,11 @@ public class Reporte {
         // Lógica para enviar
     }
 }
-✅ Buen ejemplo:
-java
-Copiar
-Editar
+```
+**Problema:** La clase `Reporte` tiene tres responsabilidades diferentes.
+
+### ✅ Ejemplo Correcto
+```java
 public class GeneradorReporte {
     public String generarContenido() {
         return "contenido";
@@ -56,30 +58,30 @@ public class EnviadorEmail {
         // Enviar por correo
     }
 }
+```
+**Beneficio:** Cada clase tiene una sola responsabilidad y es más fácil de mantener.
 
---------------------------------------------------------------
+---
 
-O - Open/Closed Principle (OCP) (El Principio Abierto-Cerrado)
+## 🔓 O - Open/Closed Principle (OCP)
 
-'El principio de apertura y cierre exige que las clases deban estar abiertas a la extensión y cerradas a la modificación'
+### Definición
+**"Las clases deben estar abiertas para extensión, pero cerradas para modificación"**
 
-Modificación significa cambiar el código de una clase existente y extensión significa agregar una nueva funcionalidad.
+Deberíamos poder agregar nuevas funcionalidades sin modificar el código existente.
 
-'Deberíamos poder agregar nuevas funciones sin tocar el código existente para la clase'
-
-
-✅ Código ejemplo:
-
+### ✅ Ejemplo Correcto
+```java
 // Interfaz base
 interface Shape {
     double area();
 }
 
-// Clase que implementa la interfaz
+// Implementaciones existentes
 class Circle implements Shape {
-    double radius;
+    private double radius;
 
-    Circle(double radius) {
+    public Circle(double radius) {
         this.radius = radius;
     }
 
@@ -88,11 +90,10 @@ class Circle implements Shape {
     }
 }
 
-// Otra clase que implementa la interfaz
 class Rectangle implements Shape {
-    double width, height;
+    private double width, height;
 
-    Rectangle(double width, double height) {
+    public Rectangle(double width, double height) {
         this.width = width;
         this.height = height;
     }
@@ -108,49 +109,15 @@ class AreaCalculator {
         return shape.area();
     }
 }
+```
 
-
-
-
-✅ Agregar: Triangle sin modificar AreaCalculator.
-
-// Interfaz base
-interface Shape {
-    double area();
-}
-
-// Círculo
-class Circle implements Shape {
-    double radius;
-
-    Circle(double radius) {
-        this.radius = radius;
-    }
-
-    public double area() {
-        return Math.PI * radius * radius;
-    }
-}
-
-// Rectángulo
-class Rectangle implements Shape {
-    double width, height;
-
-    Rectangle(double width, double height) {
-        this.width = width;
-        this.height = height;
-    }
-
-    public double area() {
-        return width * height;
-    }
-}
-
-// ✅ Nueva clase agregada: Triángulo
+### 🚀 Extensión sin Modificación
+```java
+// ✅ Nueva clase agregada sin modificar código existente
 class Triangle implements Shape {
-    double base, height;
+    private double base, height;
 
-    Triangle(double base, double height) {
+    public Triangle(double base, double height) {
         this.base = base;
         this.height = height;
     }
@@ -160,59 +127,54 @@ class Triangle implements Shape {
     }
 }
 
-// Calculadora
-class AreaCalculator {
-    public double calculateArea(Shape shape) {
-        return shape.area();
-    }
-}
-
-
-✅ Uso:
-
+// Uso
 public class Main {
     public static void main(String[] args) {
         Shape circle = new Circle(5);
         Shape rectangle = new Rectangle(4, 6);
-        Shape triangle = new Triangle(3, 7); // ✅ Nuevo triángulo
+        Shape triangle = new Triangle(3, 7); // ✅ Nuevo sin modificar AreaCalculator
 
         AreaCalculator calculator = new AreaCalculator();
 
         System.out.println("Área del círculo: " + calculator.calculateArea(circle));
         System.out.println("Área del rectángulo: " + calculator.calculateArea(rectangle));
-        System.out.println("Área del triángulo: " + calculator.calculateArea(triangle)); // ✅ Uso sin modificar calculadora
+        System.out.println("Área del triángulo: " + calculator.calculateArea(triangle));
     }
 }
+```
 
-Se agregó Triangle sin tocar el código de AreaCalculator.
+---
 
-Extensión sin modificación = se cumple el Principio OCP.
+## 🔄 L - Liskov Substitution Principle (LSP)
 
---------------------------------------------------------------
+### Definición
+**"Las clases derivadas deben poder sustituir a sus clases base sin afectar el comportamiento del programa"**
 
-L — Liskov Substitution Principle (Principio de sustitución de Liskov)
-
-## *"Las clases hijas deben poder sustituir a sus clases padre sin afectar el comportamiento del programa.”*
-
-Según este principio, nuestras clases derivadas deben poder sustituir a sus clases base sin alterar el comportamiento del programa.
-
+### ❌ Ejemplo Incorrecto
 ```java
 public class Rectangulo {
     protected int ancho, alto;
+    
     public void setAncho(int ancho) { this.ancho = ancho; }
     public void setAlto(int alto) { this.alto = alto; }
+    public int calcularArea() { return ancho * alto; }
 }
 
 public class Cuadrado extends Rectangulo {
     @Override
-    public void setAncho(int ancho) { this.ancho = this.alto = ancho; }
+    public void setAncho(int ancho) { 
+        this.ancho = this.alto = ancho; // Modifica ambos
+    }
+    
     @Override
-    public void setAlto(int alto) { this.alto = this.ancho = alto; }
+    public void setAlto(int alto) { 
+        this.alto = this.ancho = alto; // Modifica ambos
+    }
 }
 ```
+**Problema:** `Cuadrado` no se comporta como un `Rectangulo` al cambiar solo una dimensión.
 
-❌ Un `Cuadrado` no se comporta como un `Rectángulo`. Si un método espera un `Rectángulo` y cambia el ancho sin tocar el alto, **el resultado será inesperado**.
-
+### ✅ Ejemplo Correcto
 ```java
 public abstract class Forma {
     public abstract int calcularArea();
@@ -220,31 +182,40 @@ public abstract class Forma {
 
 public class Rectangulo extends Forma {
     private int ancho, alto;
-    public Rectangulo(int ancho, int alto) { this.ancho = ancho; this.alto = alto; }
-    public int calcularArea() { return ancho * alto; }
+    
+    public Rectangulo(int ancho, int alto) { 
+        this.ancho = ancho; 
+        this.alto = alto; 
+    }
+    
+    public int calcularArea() { 
+        return ancho * alto; 
+    }
 }
 
-ublic class Cuadrado extends Forma {
+public class Cuadrado extends Forma {
     private int lado;
-    public Cuadrado(int lado) { this.lado = lado; }
-    public int calcularArea() { return lado * lado; }
+    
+    public Cuadrado(int lado) { 
+        this.lado = lado; 
+    }
+    
+    public int calcularArea() { 
+        return lado * lado; 
+    }
 }
-
 ```
---------------------------------------------------------------
+**Beneficio:** Ambas clases son tratadas como formas independientes y cumplen LSP.
 
-✅ `Cuadrado` y `Rectangulo` **son tratados como formas independientes**, cumpliendo LSP.
+---
 
-🔹 I - Interface Segregation Principle (ISP)
-Principio de Segregación de Interfaces
+## 🔌 I - Interface Segregation Principle (ISP)
 
-No se debe forzar a una clase a implementar interfaces que no necesita.
+### Definición
+**"No se debe forzar a una clase a implementar interfaces que no necesita"**
 
-Ejemplo incorrecto:
-
-java
-Copiar
-Editar
+### ❌ Ejemplo Incorrecto
+```java
 interface Worker {
     void work();
     void eat();
@@ -256,14 +227,14 @@ class Robot implements Worker {
     }
 
     public void eat() {
-        // No aplica, pero lo debe implementar igual
+        // ❌ Los robots no comen, pero deben implementar este método
+        throw new UnsupportedOperationException("Robots don't eat");
     }
 }
-Ejemplo correcto:
+```
 
-java
-Copiar
-Editar
+### ✅ Ejemplo Correcto
+```java
 interface Workable {
     void work();
 }
@@ -273,43 +244,49 @@ interface Eatable {
 }
 
 class Human implements Workable, Eatable {
-    public void work() { System.out.println("Human working"); }
-    public void eat() { System.out.println("Human eating"); }
+    public void work() { 
+        System.out.println("Human working"); 
+    }
+    
+    public void eat() { 
+        System.out.println("Human eating"); 
+    }
 }
 
 class Robot implements Workable {
-    public void work() { System.out.println("Robot working"); }
+    public void work() { 
+        System.out.println("Robot working"); 
+    }
+    // ✅ No necesita implementar eat()
 }
+```
 
---------------------------------------------------------------
+---
 
-🔹 D - Dependency Inversion Principle (DIP)
-Principio de Inversión de Dependencias
+## 🔁 D - Dependency Inversion Principle (DIP)
 
-Las clases deben depender de abstracciones (interfaces), no de implementaciones concretas.
+### Definición
+**"Las clases deben depender de abstracciones (interfaces), no de implementaciones concretas"**
 
-Ejemplo incorrecto:
-
-java
-Copiar
-Editar
+### ❌ Ejemplo Incorrecto
+```java
 class LightBulb {
     public void turnOn() { System.out.println("Bulb on"); }
     public void turnOff() { System.out.println("Bulb off"); }
 }
 
 class Switch {
-    private LightBulb bulb = new LightBulb();
+    private LightBulb bulb = new LightBulb(); // ❌ Dependencia directa
 
     public void operate() {
         bulb.turnOn();
     }
 }
-Ejemplo correcto:
+```
+**Problema:** `Switch` está acoplado a `LightBulb` específicamente.
 
-java
-Copiar
-Editar
+### ✅ Ejemplo Correcto
+```java
 interface Switchable {
     void turnOn();
     void turnOff();
@@ -320,8 +297,13 @@ class LightBulb implements Switchable {
     public void turnOff() { System.out.println("Bulb off"); }
 }
 
+class Fan implements Switchable {
+    public void turnOn() { System.out.println("Fan on"); }
+    public void turnOff() { System.out.println("Fan off"); }
+}
+
 class Switch {
-    private Switchable device;
+    private Switchable device; // ✅ Depende de la abstracción
 
     public Switch(Switchable device) {
         this.device = device;
@@ -331,3 +313,35 @@ class Switch {
         device.turnOn();
     }
 }
+
+// Uso
+public class Main {
+    public static void main(String[] args) {
+        Switch lightSwitch = new Switch(new LightBulb());
+        Switch fanSwitch = new Switch(new Fan());
+        
+        lightSwitch.operate(); // "Bulb on"
+        fanSwitch.operate();   // "Fan on"
+    }
+}
+```
+
+---
+
+## 🎯 Beneficios de Aplicar SOLID
+
+- **Código más mantenible:** Cambios localizados y controlados
+- **Mayor flexibilidad:** Fácil extensión sin modificar código existente
+- **Mejor testabilidad:** Clases con responsabilidades claras
+- **Menor acoplamiento:** Componentes independientes
+- **Mayor cohesión:** Cada clase tiene un propósito específico
+
+## 📚 Recursos Adicionales
+
+- [Clean Code por Robert C. Martin](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)
+- [Principios SOLID en la práctica](https://www.baeldung.com/solid-principles)
+- [Refactoring: Improving the Design of Existing Code](https://martinfowler.com/books/refactoring.html)
+
+---
+
+*Los principios SOLID son fundamentales para escribir código de calidad. Aplicarlos desde el inicio del proyecto facilitará el mantenimiento y la evolución del software.*
